@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { s } from "./styles";
 import { useRouter } from "expo-router";
 
@@ -12,9 +12,18 @@ export const LoginScreen: React.FC = () => {
 
   return (
     <View style={s.container}>
-      <Text>
-        Olá
+      <View>
+        <Text style={s.textPrincipal}>
+        Login
       </Text>
+      <TextInput style={s.textField}>
+        <Text>E-mail</Text>
+      </TextInput>
+      <TextInput style={s.textField}>
+        <Text>Senha</Text>
+      </TextInput>
+      </View>
+      
     </View>
   )
 }
