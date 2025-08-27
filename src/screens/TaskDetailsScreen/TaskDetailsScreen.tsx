@@ -253,6 +253,7 @@ export const TaskDetailsScreen: React.FC = () => {
                 <ThemedText style={styles.sectionLabel}>Criada em</ThemedText>
                 <ThemedText style={styles.dateText}>
                   {formatDate(task.createdAt)}
+                <ThemedText style={styles.sectionLabel}>Finalizada em</ThemedText>  
                 </ThemedText>
               </ThemedView>
             </>
