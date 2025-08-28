@@ -1,8 +1,9 @@
 import { useTaskContext } from '@/src/hooks';
 import { TaskList } from '@/src/organisms';
 import { PageTemplate } from '@/src/templates';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';  // IMPORTA useRouter
 import React, { useCallback } from 'react';
+import { Button } from 'react-native';
 
 export const TaskListScreen: React.FC = () => {
   const {
@@ -14,10 +15,11 @@ export const TaskListScreen: React.FC = () => {
     getTaskStats,
   } = useTaskContext();
 
-  // Atualizar quando a tela ganha foco
+  const router = useRouter();  // Usa o hook useRouter
+
   useFocusEffect(
     useCallback(() => {
-      // Força uma pequena atualização para garantir sincronização
+      // Pode fazer algo quando a tela focar
     }, [])
   );
 
@@ -34,6 +36,10 @@ export const TaskListScreen: React.FC = () => {
         onRefresh={onRefresh}
         onToggleComplete={toggleTaskCompletion}
         onDeleteTask={deleteTask}
+      />
+      <Button 
+        title="Ir para Login"
+        onPress={() => router.push('/login')}  // Navega para a tela de login
       />
     </PageTemplate>
   );
