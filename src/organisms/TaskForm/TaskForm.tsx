@@ -4,6 +4,7 @@ import { PrioritySelector } from '@/src/molecules';
 import { CreateTaskData, TaskPriority } from '@/src/types';
 import React, { useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';  // <-- Importa useRouter
 
 export interface TaskFormProps {
   onSubmit: (taskData: CreateTaskData) => Promise<void>;
@@ -16,6 +17,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   onSuccess,
   isLoading = false,
 }) => {
+  const router = useRouter();  // <-- Usa useRouter
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<TaskPriority>('média');
@@ -50,6 +53,10 @@ export const TaskForm: React.FC<TaskFormProps> = ({
       setPriority('média');
       
       onSuccess?.();
+
+      // Navega para a tela das tarefas (ajuste o path conforme seu projeto)
+      router.replace('/(tabs)');  // <-- Ajuste essa rota para sua tela "Minhas Tarefas"
+
     } catch (error) {
       console.error('Erro ao criar tarefa:', error);
       Alert.alert('Erro', 'Não foi possível criar a tarefa. Tente novamente.');
