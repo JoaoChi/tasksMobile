@@ -5,7 +5,7 @@ export const s = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#a771ffff'
+    backgroundColor: '#ffffffff'
   },
   textPrincipal: {
     fontSize: 24,
@@ -23,7 +23,7 @@ export const s = StyleSheet.create({
   quadrado: {
     width: '50%',
     height: '70%',
-    backgroundColor: 'rgba(189, 182, 238, 0.5)',
+    backgroundColor: 'rgba(225, 221, 255, 0.5)',
     gap: 20,
     alignItems: 'center',
     borderRadius: 16,
@@ -31,14 +31,16 @@ export const s = StyleSheet.create({
     borderColor: 'rgba(67, 67, 67, 0.5)'
   },
   button: {
-    backgroundColor: 'rgba(31, 5, 178, 0.5)',
+    backgroundColor: 'rgba(193, 182, 255, 0.5)',
     width: '50%',
     height: 40,
     justifyContent: 'center',
-    borderRadius: 8
+    borderRadius: 8,
+        borderWidth: 1,
+    borderColor: '#000'
   },
   buttonText: {
-    color: '#FFFF',
-    alignSelf: 'center'
+    color: '#000000ff',
+    alignSelf: 'center',
   }
 })
