@@ -1,7 +1,8 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { TaskPriority } from '@/src/types';
+import React from 'react';
+import { StyleSheet, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export interface PriorityIndicatorProps {
   priority: TaskPriority;
@@ -24,6 +25,9 @@ export const PriorityIndicator: React.FC<PriorityIndicatorProps> = ({
   priority,
   size = 'medium',
 }) => {
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
+  
   const indicatorSize = SIZES[size];
   const color = PRIORITY_COLORS[priority];
 
@@ -36,6 +40,7 @@ export const PriorityIndicator: React.FC<PriorityIndicatorProps> = ({
           height: indicatorSize,
           borderRadius: indicatorSize / 2,
           backgroundColor: color,
+          borderColor: c.border,
         },
       ]}
     />
@@ -44,6 +49,6 @@ export const PriorityIndicator: React.FC<PriorityIndicatorProps> = ({
 
 const styles = StyleSheet.create({
   indicator: {
-    // Estilos base são aplicados dinamicamente
+    borderWidth: 2, 
   },
 });

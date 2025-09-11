@@ -1,9 +1,10 @@
 import { useTaskContext } from '@/src/hooks';
 import { TaskList } from '@/src/organisms';
 import { PageTemplate } from '@/src/templates';
-import { useFocusEffect, useRouter } from 'expo-router';  // IMPORTA useRouter
+import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
-import { Button } from 'react-native';
+import { Button, StyleSheet, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export const TaskListScreen: React.FC = () => {
   const {
@@ -15,7 +16,9 @@ export const TaskListScreen: React.FC = () => {
     getTaskStats,
   } = useTaskContext();
 
-  const router = useRouter();  // Usa o hook useRouter
+  const router = useRouter();
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
 
   useFocusEffect(
     useCallback(() => {
@@ -39,8 +42,14 @@ export const TaskListScreen: React.FC = () => {
       />
       <Button 
         title="Ir para Login"
-        onPress={() => router.push('/login')}  // Navega para a tela de login
+        onPress={() => router.push('/login')}
       />
     </PageTemplate>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#4CAF50', // Pode ser ajustado com base no tema
+  },
+});

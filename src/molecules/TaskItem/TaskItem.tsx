@@ -1,9 +1,10 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { Icon, PriorityIndicator } from '@/src/atoms';
 import { Task } from '@/src/types';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export interface TaskItemProps {
   task: Task;
@@ -18,9 +19,16 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   onToggleComplete,
   onDelete,
 }) => {
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
+
   return (
     <TouchableOpacity
-      style={[styles.container, task.completed && styles.completedContainer]}
+      style={[
+        styles.container,
+        task.completed && styles.completedContainer,
+        { backgroundColor: c.card, borderColor: c.border },
+      ]}
       onPress={() => onPress?.(task)}
     >
       <ThemedView style={styles.content}>
@@ -30,19 +38,21 @@ export const TaskItem: React.FC<TaskItemProps> = ({
               style={[
                 styles.title,
                 task.completed && styles.completedText,
+                { color: task.completed ? c.subText : c.text },
               ]}
               numberOfLines={1}
             >
               {task.title}
             </ThemedText>
-            <PriorityIndicator priority={task.priority} />
+            <PriorityIndicator priority={task.priority} size="medium" />
           </ThemedView>
-          
+
           {task.description && (
             <ThemedText
               style={[
                 styles.description,
                 task.completed && styles.completedText,
+                { color: task.completed ? c.subText : c.text },
               ]}
               numberOfLines={2}
             >
@@ -59,7 +69,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             <Icon
               name={task.completed ? 'checkmark.circle.fill' : 'circle'}
               size={24}
-              color={task.completed ? '#4CAF50' : '#666'}
+              color={task.completed ? c.tint : c.icon}
             />
           </TouchableOpacity>
 
@@ -67,7 +77,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             style={styles.actionButton}
             onPress={() => onDelete?.(task.id)}
           >
-            <Icon name="trash" size={20} color="#FF6B6B" />
+            <Icon name="trash" size={20} color={c.danger} />
           </TouchableOpacity>
         </ThemedView>
       </ThemedView>
@@ -79,13 +89,10 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: '#f8f9fa',
     borderWidth: 1,
-    borderColor: '#e9ecef',
   },
   completedContainer: {
     opacity: 0.7,
-    backgroundColor: '#f0f0f0',
   },
   content: {
     flexDirection: 'row',
@@ -110,12 +117,10 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: '#666',
     lineHeight: 20,
   },
   completedText: {
     textDecorationLine: 'line-through',
-    color: '#999',
   },
   actions: {
     flexDirection: 'row',

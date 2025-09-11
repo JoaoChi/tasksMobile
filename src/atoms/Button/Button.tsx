@@ -1,6 +1,6 @@
+import { ThemedText } from '@/components/ThemedText';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
 
 export interface ButtonProps extends TouchableOpacityProps {
   title: string;

@@ -9,7 +9,8 @@ import { PrioritySelector } from '@/src/molecules/PrioritySelector';
 import { Task, TaskPriority } from '@/src/types';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export const TaskDetailsScreen: React.FC = () => {
   const { id } = useLocalSearchParams();
@@ -21,6 +22,9 @@ export const TaskDetailsScreen: React.FC = () => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<TaskPriority>('média');
   const [isLoading, setIsLoading] = useState(false);
+
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
 
   useEffect(() => {
     if (id && typeof id === 'string') {
@@ -53,7 +57,6 @@ export const TaskDetailsScreen: React.FC = () => {
         priority,
       });
 
-      // Atualizar estado local
       const updatedTask = { ...task, title: title.trim(), description: description.trim(), priority };
       setTask(updatedTask);
       setIsEditing(false);
@@ -124,27 +127,26 @@ export const TaskDetailsScreen: React.FC = () => {
 
   if (!task) {
     return (
-      <ThemedView style={styles.loadingContainer}>
-        <ThemedText>Carregando...</ThemedText>
+      <ThemedView style={[styles.loadingContainer, { backgroundColor: c.background }]}>
+        <ThemedText style={{ color: c.text }}>Carregando...</ThemedText>
       </ThemedView>
     );
   }
 
   return (
     <KeyboardAvoidingView 
-      style={styles.container} 
+      style={[styles.container, { backgroundColor: c.background }]} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      {/* Header */}
-      <ThemedView style={styles.header}>
+      <ThemedView style={[styles.header, { backgroundColor: c.card }]}>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => router.back()}
         >
-          <Icon name="chevron.left" size={24} color="#333" />
+          <Icon name="chevron.left" size={24} color={c.text} />
         </TouchableOpacity>
         
-        <ThemedText type="title" style={styles.headerTitle}>
+        <ThemedText type="title" style={[styles.headerTitle, { color: c.text }]}>
           {isEditing ? 'Editar Tarefa' : 'Detalhes'}
         </ThemedText>
         
@@ -155,41 +157,33 @@ export const TaskDetailsScreen: React.FC = () => {
           <Icon 
             name={isEditing ? "xmark" : "pencil"} 
             size={20} 
-            color={isEditing ? "#FF6B6B" : "#333"} 
+            color={isEditing ? c.danger : c.text} 
           />
         </TouchableOpacity>
       </ThemedView>
 
       <ScrollView 
-        style={styles.content} 
+        style={[styles.content, { backgroundColor: c.background }]} 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Status da Tarefa */}
         <ThemedView style={styles.statusContainer}>
           <TouchableOpacity
-            style={[
-              styles.statusButton,
-              task.completed && styles.completedStatusButton
-            ]}
+            style={[styles.statusButton, task.completed && styles.completedStatusButton]}
             onPress={handleToggleCompletion}
           >
             <Icon
               name={task.completed ? 'checkmark.circle.fill' : 'circle'}
               size={24}
-              color={task.completed ? '#4CAF50' : '#666'}
+              color={task.completed ? c.tint : c.icon}
             />
-            <ThemedText style={[
-              styles.statusText,
-              task.completed && styles.completedStatusText
-            ]}>
+            <ThemedText style={[styles.statusText, task.completed && styles.completedStatusText]}>
               {task.completed ? 'Concluída' : 'Pendente'}
             </ThemedText>
           </TouchableOpacity>
         </ThemedView>
 
-        {/* Conteúdo da Tarefa */}
         <ThemedView style={styles.taskContent}>
           {isEditing ? (
             <>
@@ -221,20 +215,14 @@ export const TaskDetailsScreen: React.FC = () => {
             <>
               <ThemedView style={styles.section}>
                 <ThemedText style={styles.sectionLabel}>Título</ThemedText>
-                <ThemedText style={[
-                  styles.taskTitle,
-                  task.completed && styles.completedText
-                ]}>
+                <ThemedText style={[styles.taskTitle, task.completed && styles.completedText]}>
                   {task.title}
                 </ThemedText>
               </ThemedView>
 
               <ThemedView style={styles.section}>
                 <ThemedText style={styles.sectionLabel}>Descrição</ThemedText>
-                <ThemedText style={[
-                  styles.taskDescription,
-                  task.completed && styles.completedText
-                ]}>
+                <ThemedText style={[styles.taskDescription, task.completed && styles.completedText]}>
                   {task.description || 'Sem descrição'}
                 </ThemedText>
               </ThemedView>
@@ -253,7 +241,6 @@ export const TaskDetailsScreen: React.FC = () => {
                 <ThemedText style={styles.sectionLabel}>Criada em</ThemedText>
                 <ThemedText style={styles.dateText}>
                   {formatDate(task.createdAt)}
-                <ThemedText style={styles.sectionLabel}>Finalizada em</ThemedText>  
                 </ThemedText>
               </ThemedView>
             </>
@@ -261,7 +248,6 @@ export const TaskDetailsScreen: React.FC = () => {
         </ThemedView>
       </ScrollView>
 
-      {/* Botões de Ação */}
       <ThemedView style={styles.actionButtons}>
         {isEditing ? (
           <>
@@ -300,7 +286,6 @@ export const TaskDetailsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
   },
   loadingContainer: {
     flex: 1,
@@ -329,7 +314,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingBottom: 120, // Espaço para os botões
+    paddingBottom: 120,
   },
   statusContainer: {
     paddingVertical: 20,

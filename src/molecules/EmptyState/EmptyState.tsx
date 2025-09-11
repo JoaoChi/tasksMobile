@@ -1,8 +1,9 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { Icon } from '@/src/atoms';
+import React from 'react';
+import { StyleSheet, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export interface EmptyStateProps {
   icon?: string;
@@ -15,12 +16,17 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   subtitle,
 }) => {
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
+
   return (
-    <ThemedView style={styles.container}>
-      <Icon name={icon} size={64} color="#ccc" />
-      <ThemedText style={styles.title}>{title}</ThemedText>
+    <ThemedView style={[styles.container, { backgroundColor: c.background }]}>
+      <Icon name={icon} size={64} color={c.icon} />
+      <ThemedText style={[styles.title, { color: c.text }]}>{title}</ThemedText>
       {subtitle && (
-        <ThemedText style={styles.subtitle}>{subtitle}</ThemedText>
+        <ThemedText style={[styles.subtitle, { color: c.subText }]}>
+          {subtitle}
+        </ThemedText>
       )}
     </ThemedView>
   );
@@ -36,14 +42,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#666',
     marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#999',
     textAlign: 'center',
     lineHeight: 22,
   },

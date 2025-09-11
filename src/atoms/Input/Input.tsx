@@ -1,7 +1,8 @@
-import React from 'react';
-import { StyleSheet, TextInput, TextInputProps } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import React from 'react';
+import { StyleSheet, TextInput, TextInputProps, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export interface InputProps extends TextInputProps {
   label?: string;
@@ -21,30 +22,34 @@ export const Input: React.FC<InputProps> = ({
   value,
   ...props
 }) => {
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
+
   return (
     <ThemedView style={styles.container}>
       {label && (
-        <ThemedText style={styles.label}>{label}</ThemedText>
+        <ThemedText style={[styles.label, { color: c.text }]}>{label}</ThemedText>
       )}
-      
+
       <TextInput
         style={[
           styles.input,
           multiline && styles.multilineInput,
           error && styles.inputError,
           style,
+          { backgroundColor: c.background, color: c.text, borderColor: c.tint },
         ]}
         value={value}
         maxLength={maxLength}
         multiline={multiline}
         textAlignVertical={multiline ? 'top' : 'center'}
-        placeholderTextColor="#999"
+        placeholderTextColor={c.icon}
         {...props}
       />
-      
+
       <ThemedView style={styles.footer}>
         {error && (
-          <ThemedText style={styles.error}>{error}</ThemedText>
+          <ThemedText style={[styles.error, { color: c.tint }]}>{error}</ThemedText>
         )}
         {showCharCount && maxLength && (
           <ThemedText style={styles.charCount}>
@@ -64,15 +69,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#333',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    backgroundColor: '#fafafa',
     minHeight: 48,
   },
   multilineInput: {
@@ -90,10 +92,8 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 12,
-    color: '#FF6B6B',
   },
   charCount: {
     fontSize: 12,
-    color: '#999',
   },
 });

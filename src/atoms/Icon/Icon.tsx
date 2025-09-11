@@ -1,5 +1,5 @@
-import React from 'react';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import React from 'react';
 
 export interface IconProps {
   name: string;

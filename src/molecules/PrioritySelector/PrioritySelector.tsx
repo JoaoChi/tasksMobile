@@ -1,9 +1,10 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { PriorityIndicator } from '@/src/atoms';
 import { TaskPriority } from '@/src/types';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { Colors } from '../../../constants/Colors';
 
 export interface PrioritySelectorProps {
   selectedPriority: TaskPriority;
@@ -22,9 +23,12 @@ export const PrioritySelector: React.FC<PrioritySelectorProps> = ({
   onPriorityChange,
   label = 'Prioridade',
 }) => {
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.label}>{label}</ThemedText>
+    <ThemedView style={[styles.container, { backgroundColor: c.background }]}>
+      <ThemedText style={[styles.label, { color: c.text }]}>{label}</ThemedText>
       <ThemedView style={styles.optionsContainer}>
         {PRIORITY_OPTIONS.map((option) => (
           <TouchableOpacity
@@ -32,6 +36,11 @@ export const PrioritySelector: React.FC<PrioritySelectorProps> = ({
             style={[
               styles.option,
               selectedPriority === option.value && styles.selectedOption,
+              {
+                borderColor: c.border,
+                backgroundColor:
+                  selectedPriority === option.value ? c.tint : c.card,
+              },
             ]}
             onPress={() => onPriorityChange(option.value)}
           >
@@ -40,6 +49,12 @@ export const PrioritySelector: React.FC<PrioritySelectorProps> = ({
               style={[
                 styles.optionText,
                 selectedPriority === option.value && styles.selectedOptionText,
+                {
+                  color:
+                    selectedPriority === option.value
+                      ? c.background
+                      : c.subText, // Se selecionado, texto claro (fundo escuro)
+                },
               ]}
             >
               {option.label}
@@ -59,7 +74,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#333',
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -71,22 +85,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderWidth: 2,
-    borderColor: '#e0e0e0',
     borderRadius: 12,
-    backgroundColor: '#fafafa',
   },
   selectedOption: {
-    backgroundColor: '#f0f0f0',
-    borderColor: '#4CAF50',
+    borderWidth: 2,
+    borderRadius: 12,
   },
   optionText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#666',
     marginLeft: 8,
   },
   selectedOptionText: {
-    color: '#333',
     fontWeight: '600',
   },
 });
